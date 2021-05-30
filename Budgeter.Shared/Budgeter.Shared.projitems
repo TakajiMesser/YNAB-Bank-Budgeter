@@ -9,7 +9,6 @@
     <Import_RootNamespace>Budgeter.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)AppConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVAttributes.cs" />

@@ -7,8 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budgeter.ConsoleApplication
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Budgeter.Shared", "Budgeter.Shared\Budgeter.Shared.shproj", "{939574CB-250A-4CBA-96FF-4749D4E06AE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budgeter.WPFApplication", "Budgeter.WPFApplication\Budgeter.WPFApplication.csproj", "{16CC4D9A-77DC-4B76-A804-F6FFA0C300E6}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Budgeter.Shared\Budgeter.Shared.projitems*{16cc4d9a-77dc-4b76-a804-f6ffa0c300e6}*SharedItemsImports = 4
 		Budgeter.Shared\Budgeter.Shared.projitems*{5f4741e1-1315-4459-b97f-df731c2cd43d}*SharedItemsImports = 4
 		Budgeter.Shared\Budgeter.Shared.projitems*{939574cb-250a-4cba-96ff-4749d4e06ae9}*SharedItemsImports = 13
 	EndGlobalSection
@@ -21,6 +24,10 @@ Global
 		{5F4741E1-1315-4459-B97F-DF731C2CD43D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F4741E1-1315-4459-B97F-DF731C2CD43D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F4741E1-1315-4459-B97F-DF731C2CD43D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16CC4D9A-77DC-4B76-A804-F6FFA0C300E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16CC4D9A-77DC-4B76-A804-F6FFA0C300E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16CC4D9A-77DC-4B76-A804-F6FFA0C300E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16CC4D9A-77DC-4B76-A804-F6FFA0C300E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
