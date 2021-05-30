@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>939574cb-250a-4cba-96ff-4749d4e06ae9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Budgeter.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVAttributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matching\ResultSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matching\Result.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matching\Matcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVRow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUTransaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\DateRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\IRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\AmountRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\ValueRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Rule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\RuleSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\NameRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\Configuration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transactions\ITransaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transactions\TransactionSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transactions\Transaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Transactions\ITransactionSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\SubTransaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\Transaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\Model.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\Error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\Budget.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABTransaction.cs" />
+  </ItemGroup>
+</Project>
