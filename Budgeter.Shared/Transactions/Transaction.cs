@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Budgeter.Shared
+namespace Budgeter.Shared.Transactions
 {
     public abstract class Transaction : ITransaction
     {

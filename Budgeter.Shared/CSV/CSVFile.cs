@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Budgeter.Shared.CSV
 {
@@ -21,25 +22,31 @@ namespace Budgeter.Shared.CSV
             return index;
         }
 
-        public void Load()
+        public async Task Load()
         {
-            var hasHeaders = false;
-            var lines = File.ReadLines(FilePath);
-
-            foreach (var line in lines.Where(l => !string.IsNullOrWhiteSpace(l)))
+            using (var reader = File.OpenText(FilePath))
             {
-                if (hasHeaders)
-                {
-                    Rows.Add(new CSVRow(line));
-                }
-                else
-                {
-                    foreach (var value in line.Split(','))
-                    {
-                        Headers.Add(value);
-                    }
+                var hasHeaders = false;
+                string line;
 
-                    hasHeaders = true;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        if (hasHeaders)
+                        {
+                            Rows.Add(new CSVRow(line));
+                        }
+                        else
+                        {
+                            foreach (var value in line.Split(','))
+                            {
+                                Headers.Add(value);
+                            }
+
+                            hasHeaders = true;
+                        }
+                    }
                 }
             }
         }

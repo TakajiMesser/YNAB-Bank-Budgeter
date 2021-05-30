@@ -12,33 +12,28 @@ using System.Threading.Tasks;
 
 namespace Budgeter.Shared.YNAB
 {
-    public class YNABClient : TransactionSet<YNABTransaction>
+    public class YNABClient : Client<YNABTransaction>
     {
         public const string BASE_URL = "https://api.youneedabudget.com/v1";
 
+        private YNABConfiguration _configuration;
         private HttpClient _client = new HttpClient();
 
-        public YNABClient(string personalAccessToken)
+        public YNABClient(YNABConfiguration configuration)
         {
-            PersonalAccessToken = personalAccessToken;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PersonalAccessToken);
+            _configuration = configuration;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration.PersonalAccessToken);
         }
 
-        public string PersonalAccessToken { get; }
-
-        public void FetchTransactions()
+        public async override Task FetchTransactions()
         {
-            var budgetsTask = GetBudgetsAsync();
-            budgetsTask.Wait();
-            var budget = budgetsTask.Result.First();
-
-            var transactionsTask = GetTransactionsAsync(budget.ID);
-            transactionsTask.Wait();
-            var transactions = transactionsTask.Result;
+            var budget = await GetBudgetAsync();
+            var account = await GetAccountAsync(budget);
+            var transactions = await GetTransactionsAsync(budget, account);
 
             foreach (var transaction in transactions)
             {
-                _transactions.Add(new YNABTransaction()
+                Transactions.Add(new YNABTransaction()
                 {
                     Amount = transaction.Amount / 1000.0f,
                     Approved = transaction.Approved,
@@ -52,25 +47,29 @@ namespace Budgeter.Shared.YNAB
             }
         }
 
-        public async Task<IEnumerable<Budget>> GetBudgetsAsync()
+        public async Task<Budget> GetBudgetAsync()
         {
             var response = await _client.GetAsync(BASE_URL + "/budgets");
-            return await ParseResponseForModels<Budget>(response);
+            var budgets = await ParseResponseForModels<Budget>(response);
+
+            return budgets.FirstOrDefault(b => b.Name == _configuration.BudgetName);
         }
 
-        public async Task<IEnumerable<Account>> GetAccountsAsync(string budgetID)
+        public async Task<Account> GetAccountAsync(Budget budget)
         {
-            var response = await _client.GetAsync(BASE_URL + "/budgets/" + budgetID + "/accounts");
-            return await ParseResponseForModels<Account>(response);
+            var response = await _client.GetAsync(BASE_URL + "/budgets/" + budget.ID + "/accounts");
+            var accounts = await ParseResponseForModels<Account>(response);
+
+            return accounts.FirstOrDefault(a => a.Name == _configuration.AccountName);
         }
 
-        public async Task<IEnumerable<Budgeter.Shared.YNAB.Models.Transaction>> GetTransactionsAsync(string budgetID)
+        public async Task<IEnumerable<Transaction>> GetTransactionsAsync(Budget budget, Account account)
         {
             var now = DateTime.Now;
             var date = new DateTime(now.Year, now.Month, 1);
 
-            var response = await _client.GetAsync(BASE_URL + "/budgets/" + budgetID + "/transactions?since_date=" + date.ToString("yyyy-MM-dd"));
-            return await ParseResponseForModels<Budgeter.Shared.YNAB.Models.Transaction>(response);
+            var response = await _client.GetAsync(BASE_URL + "/budgets/" + budget.ID + "/accounts/" + account.ID + "/transactions?since_date=" + date.ToString("yyyy-MM-dd"));
+            return await ParseResponseForModels<Transaction>(response);
         }
 
         private async Task<T> ParseResponseForModel<T>(HttpResponseMessage response) where T : Model

@@ -1,5 +1,6 @@
 ﻿using Budgeter.Shared.PTCU;
 using Budgeter.Shared.Rules;
+using Budgeter.Shared.Transactions;
 using Budgeter.Shared.YNAB;
 using System;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Budgeter.Shared.Matching
         {
             ResultSet.Clear();
 
+            // TODO - For now, support only the first rule
             var rule = RuleSet.Rules.First();
 
             YNABTransactionSet.Sort(rule, 0);

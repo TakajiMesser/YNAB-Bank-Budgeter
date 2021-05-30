@@ -1,5 +1,6 @@
 ﻿using Budgeter.Shared.CSV;
 using Budgeter.Shared.PTCU;
+using Budgeter.Shared.Transactions;
 using Budgeter.Shared.YNAB;
 using System.Collections.Generic;
 using System.Reflection;

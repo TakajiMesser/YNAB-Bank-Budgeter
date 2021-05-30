@@ -2,15 +2,17 @@
 using System;
 using System.Collections.Generic;
 
-namespace Budgeter.Shared
+namespace Budgeter.Shared.Transactions
 {
     public class TransactionSet<T> : ITransactionSet<T> where T : ITransaction
     {
-        protected List<T> _transactions = new List<T>();
+        private List<T> _transactions = new List<T>();
 
         public int TransactionCount => _transactions.Count;
 
         public T TransactionAt(int index) => _transactions[index];
+
+        public void Add(T transaction) => _transactions.Add(transaction);
 
         public void Sort(IRule rule, int startIndex = 0) => _transactions.Sort(startIndex, _transactions.Count - startIndex, new TransactionComparer<T>(rule));
 

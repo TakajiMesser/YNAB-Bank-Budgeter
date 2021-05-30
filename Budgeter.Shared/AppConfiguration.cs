@@ -1,8 +1,8 @@
 ﻿using Budgeter.Shared.Rules;
 
-namespace Budgeter.Shared.Settings.Configuration
+namespace Budgeter.Shared
 {
-    public class Configuration
+    public class AppConfiguration
     {
         public string PTCUFilePath { get; set; }
         public string YNABCredentials { get; set; }

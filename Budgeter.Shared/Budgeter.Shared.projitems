@@ -9,12 +9,16 @@
     <Import_RootNamespace>Budgeter.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AppConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVAttributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matching\ResultSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matching\Result.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matching\Matcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVRow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUTransaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\DateRule.cs" />
@@ -24,11 +28,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Rule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\RuleSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\NameRule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Settings\Configuration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\ITransaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\TransactionSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\Transaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\ITransactionSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\SubTransaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\Transaction.cs" />
@@ -38,5 +43,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\Budget.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABTransaction.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Settings\" />
   </ItemGroup>
 </Project>

@@ -1,20 +1,23 @@
 ﻿using Budgeter.Shared.CSV;
+using System.Threading.Tasks;
 
 namespace Budgeter.Shared.PTCU
 {
-    public class PTCUClient : TransactionSet<PTCUTransaction>
+    public class PTCUClient : Client<PTCUTransaction>
     {
-        public void AddFromCSV(string filePath)
-        {
-            var csvFile = new CSVFile(filePath);
-            csvFile.Load();
+        private PTCUConfiguration _configuration;
 
-            AddFromCSV(csvFile);
-        }
+        public PTCUClient(PTCUConfiguration configuration) => _configuration = configuration;
 
-        public void AddFromCSV(CSVFile csvFile)
+        public async override Task FetchTransactions()
         {
-            _transactions.AddRange(csvFile.Deserialize<PTCUTransaction>());
+            var csvFile = new CSVFile(_configuration.CSVFilePath);
+            await csvFile.Load();
+
+            foreach (var transaction in csvFile.Deserialize<PTCUTransaction>())
+            {
+                Transactions.Add(transaction);
+            }
 
             /*//var accountNumberIndex = csvFile.IndexOf("Account Number");
             var postDateIndex = csvFile.IndexOf("Post Date");

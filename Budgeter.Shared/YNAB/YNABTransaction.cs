@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budgeter.Shared.Transactions;
+using System;
 
 namespace Budgeter.Shared.YNAB
 {
