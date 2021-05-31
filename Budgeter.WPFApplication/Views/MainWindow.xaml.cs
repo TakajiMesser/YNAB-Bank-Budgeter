@@ -16,7 +16,9 @@ namespace Budgeter.WPFApplication.Views
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Error;
             InitializeComponent();
 
+            ViewModel.Logger = LogView.ViewModel;
             Menu.ViewModel.MainWindow = this;
+            Menu.ViewModel.Logger = LogView.ViewModel;
         }
 
         private void OnLoaded(object sender, EventArgs e) { }

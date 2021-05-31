@@ -11,27 +11,20 @@ namespace Budgeter.WPFApplication.ViewModels
         private RelayCommand _openSettingsCommand;
 
         public MainWindow MainWindow { get; set; }
+        public ILogger Logger { get; set; }
 
-        public RelayCommand OpenSettingsCommand
-        {
-            get
+        public RelayCommand OpenSettingsCommand => _openSettingsCommand ?? (_openSettingsCommand = new RelayCommand(
+            p =>
             {
-                return _openSettingsCommand ?? (_openSettingsCommand = new RelayCommand(
-                    p =>
-                    {
-                        var fileName = OpenDialog(".json", "JSON Files|*.json");
-                        if (fileName != null)
-                        {
-                            var configuration = new Configuration(fileName);
-                            configuration.Load();
+                var filePath = OpenDialog(".json", "JSON Files|*.json");
 
-                            MainWindow.ViewModel.Configuration = configuration;
-                        }
-                    },
-                    p => true
-                ));
-            }
-        }
+                if (LoadSettings(filePath))
+                {
+                    Logger.WriteLine("Settings loaded.");
+                }
+            },
+            p => true
+        ));
 
         private string OpenDialog(string defaultExt, string filter, string initialDirectory = null)
         {
@@ -56,5 +49,19 @@ namespace Budgeter.WPFApplication.ViewModels
         private string NormalizedPath(string path) => Path.GetFullPath(new Uri(path).LocalPath)
             .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
             .ToUpperInvariant();
+
+        private bool LoadSettings(string filePath)
+        {
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                var configuration = new Configuration(filePath);
+                configuration.Load();
+
+                MainWindow.ViewModel.Configuration = configuration;
+                return true;
+            }
+
+            return false;
+        }
     }
 }

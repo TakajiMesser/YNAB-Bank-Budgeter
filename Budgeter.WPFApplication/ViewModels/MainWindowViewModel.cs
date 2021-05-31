@@ -9,10 +9,12 @@ namespace Budgeter.WPFApplication.ViewModels
     public class MainWindowViewModel : ViewModel
     {
         private RelayCommand _performMatchingCommand;
+        private RelayCommand _clearConsoleCommand;
 
         public MainWindowViewModel() => Title = "Budgeter";
 
         public string Title { get; set; }
+        public ILogger Logger { get; set; }
 
         public Configuration Configuration { get; set; }
 
@@ -21,8 +23,8 @@ namespace Budgeter.WPFApplication.ViewModels
             {
                 if (Configuration != null)
                 {
-                    //Console.WriteLine("Beginning matching.");
-                    //Console.WriteLine();
+                    Logger.WriteLine("Beginning matching.");
+                    Logger.WriteLine();
 
                     var ynabClient = new YNABClient(Configuration.YNABConfiguration);
                     var ptcuClient = new PTCUClient(Configuration.PTCUConfiguration);
@@ -42,10 +44,19 @@ namespace Budgeter.WPFApplication.ViewModels
                     matcher.PerformMatching();
                     matcher.ResultSet.SaveAsCSV(Configuration.OutputFilePath);
 
-                    //Console.WriteLine("Finished matching - " + matcher.ResultSet.Count + " rows in result.");
-                    //Console.WriteLine("Results written to '" + Configuration.OutputFilePath + "'.");
+                    Logger.WriteLine("Finished matching - " + matcher.ResultSet.Count + " rows in result.");
+                    Logger.WriteLine("Results written to '" + Configuration.OutputFilePath + "'.");
+                }
+                else
+                {
+                    Logger.WriteLine("No configuration found (go to Edit->Settings).");
                 }
             },
+            p => true
+        ));
+
+        public RelayCommand ClearConsoleCommand => _clearConsoleCommand ?? (_clearConsoleCommand = new RelayCommand(
+            p => Logger.Clear(),
             p => true
         ));
     }

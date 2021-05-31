@@ -12,6 +12,18 @@
     </Window.DataContext>
     <DockPanel>
         <controls:MainMenu x:Name="Menu" DockPanel.Dock="Top"/>
-        <Button DockPanel.Dock="Top" Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching"/>
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching" Grid.Column="0"/>
+            <Button Name="ClearConsoleButton" Command="{Binding ClearConsoleCommand}" Content="Clear Console" Grid.Column="1"/>
+        </Grid>
+        <controls:LogView x:Name="LogView" DockPanel.Dock="Bottom"/>
     </DockPanel>
 </Window>
