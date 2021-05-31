@@ -72,6 +72,9 @@ jobs:
           Configuration: Debug
           RuntimeIdentifier: win-${{ matrix.targetplatform }}
 
+      - name: Restore NuGet Packages
+        run: nuget restore $env:Solution_Path
+
       # Decode the Base64 encoded Pfx
       #- name: Decode the Pfx
       #  run: |
