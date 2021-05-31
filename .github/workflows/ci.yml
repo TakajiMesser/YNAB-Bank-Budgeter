@@ -29,10 +29,10 @@ jobs:
       #App_Packages_Directory: AppPackages
       #SigningCertificate: YNAB-Bank-Budgeter.pfx
       Solution_Path: Budgeter.sln
-      #Wpf_Project_Path: Budgeter.WPFApplication/Budgeter.WPFApplication.csproj
+      Wpf_Project_Path: Budgeter.WPFApplication/Budgeter.WPFApplication.csproj
       #Wap_Project_Directory: Budgeter.Package
       #Wap_Project__Name: Budgeter.Package.waproj
-      #Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
+      Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
