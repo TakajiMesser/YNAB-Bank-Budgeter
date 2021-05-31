@@ -92,6 +92,9 @@ jobs:
       # Simplified build
       - name: Build and Publish
         run: msbuild $env:Solution_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+        env:
+          Configuration: Debug
+          TargetPlatform: ${{ matrix.targetplatform }}
 
       # Remove the .pfx
       #- name: Remove the .pfx
