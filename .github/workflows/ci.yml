@@ -108,6 +108,6 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Published Package
-          path: ${{ env.Solution_Path }}\bin\${{ matrix.targetplatform }}\${{ env.Configuration }}
+          path: Budgeter.WPFApplication\bin\${{ matrix.targetplatform }}\Debug
           #name: MSIX Package
           #path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}
