@@ -15,7 +15,7 @@
         <ItemsControl ItemsSource="{Binding Lines, Mode=OneWay}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Path=.}" Foreground="White" FontFamily="Consolas"/>
+                    <TextBlock Text="{Binding Path=Value}" Foreground="{Binding Path=Color}" FontFamily="Consolas"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

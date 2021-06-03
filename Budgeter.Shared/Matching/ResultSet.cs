@@ -15,6 +15,8 @@ namespace Budgeter.Shared.Matching
 
         public void AddResult(Result result) => _results.Add(result);
 
+        public Result ResultAt(int index) => _results[index];
+
         public void Clear() => _results.Clear();
 
         public void MarkResult(int ynabIndex, int ptcuIndex) { }

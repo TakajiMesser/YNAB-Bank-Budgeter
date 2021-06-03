@@ -18,11 +18,33 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching" Grid.Column="0"/>
-            <Button Name="ClearConsoleButton" Command="{Binding ClearConsoleCommand}" Content="Clear Console" Grid.Column="1"/>
+            <ListView Name="YNABList" ItemsSource="{Binding Results}" Grid.Row="0" Grid.Column="0">
+                <!--<ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                </ListView.Resources>-->
+                <ListView.View>
+                    <GridView x:Name="YNABGrid"/>
+                </ListView.View>
+            </ListView>
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
+            <ListView Name="BankList" ItemsSource="{Binding Results}"  Grid.Row="0" Grid.Column="2">
+                <!--<ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                </ListView.Resources>-->
+                <ListView.View>
+                    <GridView x:Name="BankGrid"/>
+                </ListView.View>
+            </ListView>
+            <Button Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching" Grid.Row="1" Grid.Column="0"/>
+            <Button Name="ClearConsoleButton" Command="{Binding ClearConsoleCommand}" Content="Clear Console" Grid.Row="1" Grid.Column="2"/>
         </Grid>
         <controls:LogView x:Name="LogView" DockPanel.Dock="Bottom"/>
     </DockPanel>

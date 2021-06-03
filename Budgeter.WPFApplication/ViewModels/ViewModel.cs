@@ -7,10 +7,10 @@ namespace Budgeter.WPFApplication.ViewModels
 {
     public abstract class ViewModel : INotifyPropertyChanged
     {
-        private Dictionary<string, ViewModel> _childViewModelByName = new Dictionary<string, ViewModel>();
-        private Dictionary<string, PropertyChangedEventHandler> _handlersByName = new Dictionary<string, PropertyChangedEventHandler>();
+        private Dictionary<string, ViewModel> _childViewModelByName = new();
+        private Dictionary<string, PropertyChangedEventHandler> _handlersByName = new();
 
-        protected ObservableCollection<ViewModel> _childViewModels = new ObservableCollection<ViewModel>();
+        protected ObservableCollection<ViewModel> _childViewModels = new();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Contracts", "CS0067", Justification = "Fody.PropertyChanged requires this event.")]
         public event PropertyChangedEventHandler PropertyChanged;
@@ -79,7 +79,7 @@ namespace Budgeter.WPFApplication.ViewModels
             InvokePropertyChanged(propertyName);
         }
 
-        private PropertyChangedEventHandler CreateChildPropertyChangeHandler(string propertyName) => new PropertyChangedEventHandler((s, args) =>
+        private PropertyChangedEventHandler CreateChildPropertyChangeHandler(string propertyName) => new((s, args) =>
         {
             // This child view model should propagate any of its changing properties upward, but renamed to the encapsulating property name
             var propertyInfo = GetType().GetProperty(propertyName);

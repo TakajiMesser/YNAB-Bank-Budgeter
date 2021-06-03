@@ -65,8 +65,9 @@ namespace Budgeter.Shared.YNAB
 
         public async Task<IEnumerable<Transaction>> GetTransactionsAsync(Budget budget, Account account)
         {
-            var now = DateTime.Now;
-            var date = new DateTime(now.Year, now.Month, 1);
+            //var now = DateTime.Now;
+            //var date = new DateTime(now.Year, now.Month, 1);
+            var date = new DateTime(2021, 5, 1);
 
             var response = await _client.GetAsync(BASE_URL + "/budgets/" + budget.ID + "/accounts/" + account.ID + "/transactions?since_date=" + date.ToString("yyyy-MM-dd"));
             return await ParseResponseForModels<Transaction>(response);
