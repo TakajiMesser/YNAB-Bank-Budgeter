@@ -1,7 +1,6 @@
 ﻿using Budgeter.Shared.YNAB.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,9 +64,10 @@ namespace Budgeter.Shared.YNAB
 
         public async Task<IEnumerable<Transaction>> GetTransactionsAsync(Budget budget, Account account)
         {
-            //var now = DateTime.Now;
-            //var date = new DateTime(now.Year, now.Month, 1);
-            var date = new DateTime(2021, 5, 1);
+            var now = DateTime.Now;
+            var date = _configuration.SinceDate.HasValue
+                ? _configuration.SinceDate.Value
+                : new DateTime(now.Year, now.Month, 1);
 
             var response = await _client.GetAsync(BASE_URL + "/budgets/" + budget.ID + "/accounts/" + account.ID + "/transactions?since_date=" + date.ToString("yyyy-MM-dd"));
             return await ParseResponseForModels<Transaction>(response);
@@ -89,15 +89,7 @@ namespace Budgeter.Shared.YNAB
         private async Task<List<T>> ParseResponseForModels<T>(HttpResponseMessage response) where T : Model
         {
             var responseString = await response.Content.ReadAsStringAsync();
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy { ProcessDictionaryKeys = true }
-                }
-            };
-
-            var json = JsonConvert.DeserializeObject<JObject>(responseString, settings);
+            var json = JsonConvert.DeserializeObject<JObject>(responseString, Configuration.Instance.JSONSettings);
             //var json = JObject.Parse(responseString);
 
             if (!response.IsSuccessStatusCode) throw new YNABException(json["error"].Value<Error>());

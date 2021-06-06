@@ -71,6 +71,38 @@ namespace Budgeter.WPFApplication.ViewModels
             p => true
         );
 
+        public void OnLoggerChanged()
+        {
+            if (Configuration != null)
+            {
+                if (Logger != null)
+                {
+                    Configuration.Error += Instance_Error;
+                }
+                else
+                {
+                    Configuration.Error -= Instance_Error;
+                }
+            }
+        }
+
+        public void OnConfigurationChanged()
+        {
+            if (Configuration != null)
+            {
+                if (Logger != null)
+                {
+                    Configuration.Error += Instance_Error;
+                }
+                else
+                {
+                    Configuration.Error -= Instance_Error;
+                }
+            }
+        }
+
+        private void Instance_Error(object sender, System.UnhandledExceptionEventArgs e) => Logger.Error("Error parsing JSON: " + e.ExceptionObject.ToString());
+
         public void DoShit()
         {
             /*<GridView x:Name="YNABGrid">

@@ -1,5 +1,4 @@
-﻿using Budgeter.Shared.YNAB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -24,19 +23,15 @@ namespace Budgeter.WPFApplication.Views
             Menu.ViewModel.MainWindow = this;
             Menu.ViewModel.Logger = LogView.ViewModel;
 
-            foreach (var column in GetGridColumns<YNABTransaction>())
+            /*foreach (var column in GetGridColumns<YNABTransaction>())
             {
                 YNABGrid.Columns.Add(column);
-            }
+            }*/
 
             /*foreach (var column in GetGridColumns<PTCUTransaction>())
             {
                 BankGrid.Columns.Add(column);
             }*/
-
-            /*<GridView x:Name="YNABGrid">
-                <GridViewColumn Header="Amount" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Amount}" />
-            </GridView>*/
         }
 
         private static IEnumerable<GridViewColumn> GetGridColumns<T>()

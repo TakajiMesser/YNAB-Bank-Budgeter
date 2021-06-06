@@ -14,6 +14,7 @@ namespace Budgeter.Shared.Banks
 
         public float Credit { get; set; }
 
+        [CSVIgnore]
         public override string BankName => "PTCU";
         public override string Payee => Description ?? "";
         public override float Quantity => Credit - Debit;

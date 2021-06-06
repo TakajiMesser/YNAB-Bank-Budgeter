@@ -3,7 +3,6 @@ using Budgeter.Shared.Rules;
 using Budgeter.Shared.Transactions;
 using Budgeter.Shared.YNAB;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Budgeter.Shared.Matching
@@ -52,31 +51,52 @@ namespace Budgeter.Shared.Matching
             while (_indexSet.Index<YNABTransaction>() < TransactionSet.Count<YNABTransaction>())
             {
                 var ynabTransaction = TransactionSet.TransactionAt<YNABTransaction>(_indexSet.Index<YNABTransaction>());
-                var needsYNABIncrement = false;
+                var isYNABMatchFound = false;
+                var hasBankTransaction = false;
 
+                // TODO - What if NO bank transactions match this YNAB transaction?
+                // In that case, we need to add a result row with just the YNAB transaction listed, and then increment the YNAB row forward
                 foreach (var transactionType in TransactionSet.Types.Where(t => t != typeof(YNABTransaction)))
                 {
                     if (_indexSet.Index(transactionType) < TransactionSet.Count(transactionType))
                     {
+                        hasBankTransaction = true;
+
                         var bankTransaction = (BankTransaction)TransactionSet.TransactionAt(transactionType, _indexSet.Index(transactionType));
                         var result = GetResult(rule, ynabTransaction, bankTransaction);
 
                         if (result.YNABTransaction != null)
                         {
-                            needsYNABIncrement = true;
+                            if (isYNABMatchFound)
+                            {
+                                // The YNAB transaction has already been matched in another row, so remove it from this result
+                                result.YNABTransaction = null;
+                            }
+                            else
+                            {
+                                isYNABMatchFound = true;
+                            }
                         }
 
+                        // TODO - This is going to misorder the bank transaction rows, since we aren't comparing bank transactions against each other for each YNAB transaction iteration
+                        // If the results are going to be separated by bank anyways, then this might not be an issue
                         if (result.BankTransaction != null)
                         {
                             _indexSet.Increment(transactionType);
                         }
 
-                        // TODO - If this result includes the YNAB row, we don't want to add it now (YNAB row should only exist once for all bank type loop)
                         ResultSet.AddResult(result);
                     }
                 }
 
-                if (needsYNABIncrement)
+                if (!hasBankTransaction && !isYNABMatchFound)
+                {
+                    // Because we have no bank transactions left and haven't matched out YNAB row (which is a redundant check...), add it as a result row and increment
+                    ResultSet.AddResult(new Result(ynabTransaction, null));
+                    isYNABMatchFound = true;
+                }
+
+                if (isYNABMatchFound)
                 {
                     _indexSet.Increment<YNABTransaction>();
                 }

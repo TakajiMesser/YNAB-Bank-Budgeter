@@ -1,4 +1,4 @@
-﻿using Budgeter.Shared.Banks;
+﻿using Budgeter.Shared.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -67,13 +67,13 @@ namespace Budgeter.Shared.CSV
             File.WriteAllLines(FilePath, lines);
         }
 
-        public void DeserializeInto(BankTransaction transaction, int rowIndex)
+        public void DeserializeInto(object instance, int rowIndex)
         {
             var row = Rows[rowIndex];
 
-            foreach (var property in transaction.GetType().GetProperties())
+            foreach (var property in instance.GetType().GetProperties())
             {
-                if (property.GetCustomAttributes(typeof(CSVIgnoreAttribute), true) == null)
+                if (!property.HasCustomAttribute<CSVIgnoreAttribute>(true))
                 {
                     var headerName = property.GetCustomAttributes(typeof(CSVHeaderAttribute), true).FirstOrDefault() is CSVHeaderAttribute headerAttribute
                         ? headerAttribute.Header
@@ -87,19 +87,19 @@ namespace Budgeter.Shared.CSV
 
                         if (property.PropertyType == typeof(DateTime))
                         {
-                            property.SetValue(transaction, DateTime.Parse(value));
+                            property.SetValue(instance, DateTime.Parse(value));
                         }
                         else if (property.PropertyType == typeof(float))
                         {
-                            property.SetValue(transaction, !string.IsNullOrEmpty(value) ? float.Parse(value) : 0.0f);
+                            property.SetValue(instance, !string.IsNullOrEmpty(value) ? float.Parse(value) : 0.0f);
                         }
                         else if (property.PropertyType == typeof(int))
                         {
-                            property.SetValue(transaction, !string.IsNullOrEmpty(value) ? int.Parse(value) : 0);
+                            property.SetValue(instance, !string.IsNullOrEmpty(value) ? int.Parse(value) : 0);
                         }
                         else if (property.PropertyType == typeof(string))
                         {
-                            property.SetValue(transaction, value);
+                            property.SetValue(instance, value);
                         }
                     }
                 }

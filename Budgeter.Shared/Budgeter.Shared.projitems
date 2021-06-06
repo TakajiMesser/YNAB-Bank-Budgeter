@@ -35,6 +35,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\TransactionSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\Transaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\ITransactionSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\ReflectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\YNABException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YNAB\Models\SubTransaction.cs" />

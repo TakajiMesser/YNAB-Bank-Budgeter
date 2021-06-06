@@ -14,6 +14,7 @@
         <controls:MainMenu x:Name="Menu" DockPanel.Dock="Top"/>
         <Grid DockPanel.Dock="Top">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
@@ -22,18 +23,24 @@
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ListView Name="YNABList" ItemsSource="{Binding Results}" Grid.Row="0" Grid.Column="0">
+            <Label Content="YNAB" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+            <Label Content="Bank" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
+            <ListView Name="YNABList" ItemsSource="{Binding Results}" Grid.Row="1" Grid.Column="0">
                 <!--<ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                     </Style>
                 </ListView.Resources>-->
                 <ListView.View>
-                    <GridView x:Name="YNABGrid"/>
+                    <GridView x:Name="YNABGrid">
+                        <GridViewColumn Header="Payee" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Payee}" />
+                        <GridViewColumn Header="Quantity" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Quantity}" />
+                        <GridViewColumn Header="Time" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Time}" />
+                    </GridView>
                 </ListView.View>
             </ListView>
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
-            <ListView Name="BankList" ItemsSource="{Binding Results}"  Grid.Row="0" Grid.Column="2">
+            <ListView Name="BankList" ItemsSource="{Binding Results}"  Grid.Row="1" Grid.Column="2">
                 <!--<ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -47,8 +54,8 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <Button Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching" Grid.Row="1" Grid.Column="0"/>
-            <Button Name="ClearConsoleButton" Command="{Binding ClearConsoleCommand}" Content="Clear Console" Grid.Row="1" Grid.Column="2"/>
+            <Button Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching" Grid.Row="2" Grid.Column="0"/>
+            <Button Name="ClearConsoleButton" Command="{Binding ClearConsoleCommand}" Content="Clear Console" Grid.Row="2" Grid.Column="2"/>
         </Grid>
         <controls:LogView x:Name="LogView" DockPanel.Dock="Bottom"/>
     </DockPanel>

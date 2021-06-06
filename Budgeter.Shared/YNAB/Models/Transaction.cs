@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Budgeter.Shared.YNAB.Models
 {
@@ -18,6 +19,8 @@ namespace Budgeter.Shared.YNAB.Models
         public string ImportID { get; set; }
         public bool Deleted { get; set; }
         public string AccountName { get; set; }
+
+        [JsonProperty("payee_name")]
         public string PayeeName { get; set; }
         public string CategoryName { get; set; }
         public List<SubTransaction> Subtransactions { get; set; }

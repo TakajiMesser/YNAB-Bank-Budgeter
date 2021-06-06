@@ -20,20 +20,23 @@ namespace Budgeter.WPFApplication.ViewModels
 
                 if (LoadSettings(filePath))
                 {
+                    MainWindow.ViewModel.Configuration = Configuration.Instance;
                     Logger.Message("Settings loaded.");
+                }
+                else
+                {
+                    MainWindow.ViewModel.Configuration = null;
+                    Logger.Warning("Settings failed to load.");
                 }
             },
             p => true
         );
 
-        private bool LoadSettings(string filePath)
+        private static bool LoadSettings(string filePath)
         {
             if (!string.IsNullOrEmpty(filePath))
             {
-                var configuration = new Configuration(filePath);
-                configuration.Load();
-
-                MainWindow.ViewModel.Configuration = configuration;
+                Configuration.Instance.Load(filePath);
                 return true;
             }
 

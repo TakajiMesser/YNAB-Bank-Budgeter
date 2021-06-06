@@ -1,4 +1,5 @@
 ﻿using Budgeter.Shared.Transactions;
+using Newtonsoft.Json;
 using System;
 
 namespace Budgeter.Shared.YNAB
@@ -13,6 +14,7 @@ namespace Budgeter.Shared.YNAB
         public bool Approved { get; set; }
         public string FlagColor { get; set; }
 
+        [JsonProperty("payee_name")]
         public string PayeeName { get; set; }
         public string CategoryName { get; set; }
 
