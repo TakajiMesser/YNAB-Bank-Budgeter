@@ -16,8 +16,8 @@ namespace Budgeter.Shared.YNAB
         public string PayeeName { get; set; }
         public string CategoryName { get; set; }
 
-        public override string GetName() => PayeeName ?? "";
-        public override float GetAmount() => Amount;
-        public override DateTime GetDate() => Date;
+        public override string Payee => PayeeName ?? "";
+        public override float Quantity => Amount;
+        public override DateTime Time => Date;
     }
 }

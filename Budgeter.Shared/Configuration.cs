@@ -1,4 +1,4 @@
-﻿using Budgeter.Shared.PTCU;
+﻿using Budgeter.Shared.Banks;
 using Budgeter.Shared.Rules;
 using Budgeter.Shared.YNAB;
 using Newtonsoft.Json;
@@ -13,7 +13,7 @@ namespace Budgeter.Shared
         public string FilePath { get; }
 
         public YNABConfiguration YNABConfiguration { get; set; }
-        public PTCUConfiguration PTCUConfiguration { get; set; }
+        public BankConfiguration BankConfiguration { get; set; }
         public RuleSet RuleSet { get; set; }
         public string OutputFilePath { get; set; }
 

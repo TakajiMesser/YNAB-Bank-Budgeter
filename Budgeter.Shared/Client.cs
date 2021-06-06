@@ -1,4 +1,5 @@
 ﻿using Budgeter.Shared.Transactions;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Budgeter.Shared
@@ -9,7 +10,9 @@ namespace Budgeter.Shared
 
         //public Client(IConfiguration configuration) => _configuration = configuration;
 
-        public TransactionSet<T> Transactions { get; } = new TransactionSet<T>();
+        protected List<T> _transactions = new();
+
+        public IEnumerable<T> Transactions => _transactions;
 
         public abstract Task FetchTransactions();
     }

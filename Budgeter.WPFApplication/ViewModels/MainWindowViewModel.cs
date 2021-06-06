@@ -1,6 +1,6 @@
 ﻿using Budgeter.Shared;
+using Budgeter.Shared.Banks;
 using Budgeter.Shared.Matching;
-using Budgeter.Shared.PTCU;
 using Budgeter.Shared.YNAB;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -30,19 +30,20 @@ namespace Budgeter.WPFApplication.ViewModels
                     Logger.LineBreak();
 
                     var ynabClient = new YNABClient(Configuration.YNABConfiguration);
-                    var ptcuClient = new PTCUClient(Configuration.PTCUConfiguration);
+                    var bankClient = new BankClient(Configuration.BankConfiguration);
 
                     var ynabFetchTask = ynabClient.FetchTransactions();
-                    var ptcuFetchTask = ptcuClient.FetchTransactions();
+                    var bankFetchTask = bankClient.FetchTransactions();
 
-                    await Task.WhenAll(ynabFetchTask, ptcuFetchTask);
+                    await Task.WhenAll(ynabFetchTask, bankFetchTask);
 
                     var matcher = new Matcher()
                     {
-                        YNABTransactionSet = ynabClient.Transactions,
-                        PTCUTransactionSet = ptcuClient.Transactions,
                         RuleSet = Configuration.RuleSet
                     };
+
+                    matcher.TransactionSet.AddRange(ynabClient.Transactions);
+                    matcher.TransactionSet.AddRange(bankClient.Transactions);
 
                     matcher.PerformMatching();
                     matcher.ResultSet.SaveAsCSV(Configuration.OutputFilePath);

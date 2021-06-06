@@ -1,31 +1,33 @@
-﻿using Budgeter.Shared.PTCU;
+﻿using Budgeter.Shared.Banks;
 using Budgeter.Shared.Rules;
 using Budgeter.Shared.Transactions;
 using Budgeter.Shared.YNAB;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Budgeter.Shared.Matching
 {
     public class Matcher
     {
-        public ITransactionSet<YNABTransaction> YNABTransactionSet { get; set; }
-        public ITransactionSet<PTCUTransaction> PTCUTransactionSet { get; set; }
+        private IndexSet _indexSet = new();
 
+        public ITransactionSet TransactionSet { get; } = new TransactionSet();
         public RuleSet RuleSet { get; set; }
         public ResultSet ResultSet { get; } = new ResultSet();
 
         public void PerformMatching()
         {
+            _indexSet.Clear();
             ResultSet.Clear();
+
+            _indexSet.Initialize(TransactionSet.Types);
 
             // TODO - For now, support only the first rule
             var rule = RuleSet.Rules.First();
 
-            YNABTransactionSet.Sort(rule, 0);
-            PTCUTransactionSet.Sort(rule, 0);
-
-            ApplyRule(rule, 0, 0);
+            TransactionSet.Sort(rule, 0);
+            ApplyRule(rule);
 
             /*var ruleIndex = 0;
             var ynabIndex = 0;
@@ -45,45 +47,58 @@ namespace Budgeter.Shared.Matching
             }*/
         }
 
-        private void ApplyRule(IRule rule, int ynabIndex, int ptcuIndex)
+        private void ApplyRule(IRule rule)
         {
-            while (ynabIndex < YNABTransactionSet.TransactionCount && ptcuIndex < PTCUTransactionSet.TransactionCount)
+            while (_indexSet.Index<YNABTransaction>() < TransactionSet.Count<YNABTransaction>())
             {
-                var ynabTransaction = YNABTransactionSet.TransactionAt(ynabIndex);
-                var ptcuTransaction = PTCUTransactionSet.TransactionAt(ptcuIndex);
+                var ynabTransaction = TransactionSet.TransactionAt<YNABTransaction>(_indexSet.Index<YNABTransaction>());
+                var needsYNABIncrement = false;
 
-                var result = GetResult(rule, ynabTransaction, ptcuTransaction);
-
-                if (result.YNABTransaction != null)
+                foreach (var transactionType in TransactionSet.Types.Where(t => t != typeof(YNABTransaction)))
                 {
-                    ynabIndex++;
+                    if (_indexSet.Index(transactionType) < TransactionSet.Count(transactionType))
+                    {
+                        var bankTransaction = (BankTransaction)TransactionSet.TransactionAt(transactionType, _indexSet.Index(transactionType));
+                        var result = GetResult(rule, ynabTransaction, bankTransaction);
+
+                        if (result.YNABTransaction != null)
+                        {
+                            needsYNABIncrement = true;
+                        }
+
+                        if (result.BankTransaction != null)
+                        {
+                            _indexSet.Increment(transactionType);
+                        }
+
+                        // TODO - If this result includes the YNAB row, we don't want to add it now (YNAB row should only exist once for all bank type loop)
+                        ResultSet.AddResult(result);
+                    }
                 }
 
-                if (result.PTCUTransaction != null)
+                if (needsYNABIncrement)
                 {
-                    ptcuIndex++;
+                    _indexSet.Increment<YNABTransaction>();
                 }
-
-                ResultSet.AddResult(result);
             }
         }
 
-        private Result GetResult(IRule rule, YNABTransaction ynabTransaction, PTCUTransaction ptcuTransaction)
+        private static Result GetResult(IRule rule, YNABTransaction ynabTransaction, BankTransaction bankTransaction)
         {
-            var comparisonResult = rule.Compare(ynabTransaction, ptcuTransaction);
+            var comparisonResult = rule.Compare(ynabTransaction, bankTransaction);
 
-            if (comparisonResult > 0) // YNAB > PTCU
+            if (comparisonResult > 0) // YNAB > Bank
             {
                 if (rule.Order == RuleOrder.Ascending)
                 {
-                    return new Result(null, ptcuTransaction);
+                    return new Result(null, bankTransaction);
                 }
                 else if (rule.Order == RuleOrder.Descending)
                 {
                     return new Result(ynabTransaction, null);
                 }
             }
-            else if (comparisonResult < 0) // YNAB < PTCU
+            else if (comparisonResult < 0) // YNAB < Bank
             {
                 if (rule.Order == RuleOrder.Ascending)
                 {
@@ -91,12 +106,12 @@ namespace Budgeter.Shared.Matching
                 }
                 else if (rule.Order == RuleOrder.Descending)
                 {
-                    return new Result(null, ptcuTransaction);
+                    return new Result(null, bankTransaction);
                 }
             }
-            else // YNAB == PTCU
+            else // YNAB == Bank
             {
-                return new Result(ynabTransaction, ptcuTransaction);
+                return new Result(ynabTransaction, bankTransaction);
             }
 
             throw new Exception("Something went wrong");

@@ -1,5 +1,4 @@
-﻿using Budgeter.Shared.PTCU;
-using Budgeter.Shared.YNAB;
+﻿using Budgeter.Shared.YNAB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,17 +29,17 @@ namespace Budgeter.WPFApplication.Views
                 YNABGrid.Columns.Add(column);
             }
 
-            foreach (var column in GetGridColumns<PTCUTransaction>())
+            /*foreach (var column in GetGridColumns<PTCUTransaction>())
             {
                 BankGrid.Columns.Add(column);
-            }
+            }*/
 
             /*<GridView x:Name="YNABGrid">
                 <GridViewColumn Header="Amount" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Amount}" />
             </GridView>*/
         }
 
-        private IEnumerable<GridViewColumn> GetGridColumns<T>()
+        private static IEnumerable<GridViewColumn> GetGridColumns<T>()
         {
             foreach (var property in typeof(T).GetProperties())
             {

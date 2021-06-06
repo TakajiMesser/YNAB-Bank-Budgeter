@@ -7,4 +7,7 @@ namespace Budgeter.Shared.CSV
     {
         public string Header { get; set; }
     }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class CSVIgnoreAttribute : Attribute { }
 }

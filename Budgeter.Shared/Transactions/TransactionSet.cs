@@ -4,40 +4,68 @@ using System.Collections.Generic;
 
 namespace Budgeter.Shared.Transactions
 {
-    public class TransactionSet<T> : ITransactionSet<T> where T : ITransaction
+    public class TransactionSet : ITransactionSet
     {
-        private List<T> _transactions = new List<T>();
+        private Dictionary<Type, List<ITransaction>> _transactionsByType = new();
 
-        public int TransactionCount => _transactions.Count;
+        public IEnumerable<Type> Types => _transactionsByType.Keys;
 
-        public T TransactionAt(int index) => _transactions[index];
+        public void Add(ITransaction transaction)
+        {
+            var type = transaction.GetType();
 
-        public void Add(T transaction) => _transactions.Add(transaction);
+            if (!_transactionsByType.ContainsKey(type))
+            {
+                _transactionsByType.Add(type, new List<ITransaction>());
+            }
 
-        public void Sort(IRule rule, int startIndex = 0) => _transactions.Sort(startIndex, _transactions.Count - startIndex, new TransactionComparer<T>(rule));
+            _transactionsByType[type].Add(transaction);
+        }
 
-        private class TransactionComparer<U> : IComparer<U> where U : ITransaction
+        public void AddRange(IEnumerable<ITransaction> transactions)
+        {
+            foreach (var transaction in transactions)
+            {
+                Add(transaction);
+            }
+        }
+
+        public void Sort(IRule rule, int startIndex = 0)
+        {
+            foreach (var transactions in _transactionsByType.Values)
+            {
+                transactions.Sort(startIndex, transactions.Count - startIndex, new TransactionComparer(rule));
+            }
+        }
+
+        public int Count(Type type) => _transactionsByType[type].Count;
+        public int Count<T>() where T : ITransaction => _transactionsByType[typeof(T)].Count;
+
+        public ITransaction TransactionAt(Type type, int index) => _transactionsByType[type][index];
+        public T TransactionAt<T>(int index) where T : ITransaction => (T)_transactionsByType[typeof(T)][index];
+
+        private class TransactionComparer : IComparer<ITransaction>
         {
             private IRule _rule;
 
             public TransactionComparer(IRule rule) => _rule = rule;
 
-            public int Compare(U x, U y)
+            public int Compare(ITransaction x, ITransaction y)
             {
                 switch (_rule)
                 {
-                    case NameRule _:
+                    case PayeeRule _:
                         return _rule.Order == RuleOrder.Descending
-                            ? y.GetName().CompareTo(x.GetName())
-                            : x.GetName().CompareTo(y.GetName());
-                    case AmountRule _:
+                            ? y.Payee.CompareTo(x.Payee)
+                            : x.Payee.CompareTo(y.Payee);
+                    case QuantityRule _:
                         return _rule.Order == RuleOrder.Descending
-                            ? y.GetAmount().CompareTo(x.GetAmount())
-                            : x.GetAmount().CompareTo(y.GetAmount());
-                    case DateRule _:
+                            ? y.Quantity.CompareTo(x.Quantity)
+                            : x.Quantity.CompareTo(y.Quantity);
+                    case TimeRule _:
                         return _rule.Order == RuleOrder.Descending
-                            ? y.GetDate().CompareTo(x.GetDate())
-                            : x.GetDate().CompareTo(y.GetDate());
+                            ? y.Time.CompareTo(x.Time)
+                            : x.Time.CompareTo(y.Time);
                 }
 
                 throw new ArgumentException("Could not handle rule type " + _rule.GetType());

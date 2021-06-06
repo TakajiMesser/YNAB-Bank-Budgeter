@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budgeter.Shared.Banks;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,13 +67,13 @@ namespace Budgeter.Shared.CSV
             File.WriteAllLines(FilePath, lines);
         }
 
-        public IEnumerable<T> Deserialize<T>() where T : new()
+        public void DeserializeInto(BankTransaction transaction, int rowIndex)
         {
-            foreach (var row in Rows)
-            {
-                var t = new T();
+            var row = Rows[rowIndex];
 
-                foreach (var property in typeof(T).GetProperties())
+            foreach (var property in transaction.GetType().GetProperties())
+            {
+                if (property.GetCustomAttributes(typeof(CSVIgnoreAttribute), true) == null)
                 {
                     var headerName = property.GetCustomAttributes(typeof(CSVHeaderAttribute), true).FirstOrDefault() is CSVHeaderAttribute headerAttribute
                         ? headerAttribute.Header
@@ -86,19 +87,61 @@ namespace Budgeter.Shared.CSV
 
                         if (property.PropertyType == typeof(DateTime))
                         {
-                            property.SetValue(t, DateTime.Parse(value));
+                            property.SetValue(transaction, DateTime.Parse(value));
                         }
                         else if (property.PropertyType == typeof(float))
                         {
-                            property.SetValue(t, !string.IsNullOrEmpty(value) ? float.Parse(value) : 0.0f);
+                            property.SetValue(transaction, !string.IsNullOrEmpty(value) ? float.Parse(value) : 0.0f);
                         }
                         else if (property.PropertyType == typeof(int))
                         {
-                            property.SetValue(t, !string.IsNullOrEmpty(value) ? int.Parse(value) : 0);
+                            property.SetValue(transaction, !string.IsNullOrEmpty(value) ? int.Parse(value) : 0);
                         }
                         else if (property.PropertyType == typeof(string))
                         {
-                            property.SetValue(t, value);
+                            property.SetValue(transaction, value);
+                        }
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<T> Deserialize<T>() where T : new()
+        {
+            foreach (var row in Rows)
+            {
+                var t = new T();
+
+                foreach (var property in typeof(T).GetProperties())
+                {
+                    if (property.GetCustomAttributes(typeof(CSVIgnoreAttribute), true) == null)
+                    {
+                        var headerName = property.GetCustomAttributes(typeof(CSVHeaderAttribute), true).FirstOrDefault() is CSVHeaderAttribute headerAttribute
+                            ? headerAttribute.Header
+                            : property.Name;
+
+                        var index = IndexOf(headerName);
+
+                        if (index >= 0)
+                        {
+                            var value = row.Values[index];
+
+                            if (property.PropertyType == typeof(DateTime))
+                            {
+                                property.SetValue(t, DateTime.Parse(value));
+                            }
+                            else if (property.PropertyType == typeof(float))
+                            {
+                                property.SetValue(t, !string.IsNullOrEmpty(value) ? float.Parse(value) : 0.0f);
+                            }
+                            else if (property.PropertyType == typeof(int))
+                            {
+                                property.SetValue(t, !string.IsNullOrEmpty(value) ? int.Parse(value) : 0);
+                            }
+                            else if (property.PropertyType == typeof(string))
+                            {
+                                property.SetValue(t, value);
+                            }
                         }
                     }
                 }

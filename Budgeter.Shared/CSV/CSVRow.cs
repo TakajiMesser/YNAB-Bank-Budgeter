@@ -16,14 +16,7 @@ namespace Budgeter.Shared.CSV
                 switch (character)
                 {
                     case '\"':
-                        if (isQuote)
-                        {
-                            isQuote = false;
-                        }
-                        else
-                        {
-                            isQuote = true;
-                        }
+                        isQuote = !isQuote;
                         break;
                     case ',':
                         if (isQuote)

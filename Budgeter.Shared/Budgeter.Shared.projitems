@@ -9,24 +9,27 @@
     <Import_RootNamespace>Budgeter.Shared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Banks\BankClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Banks\BankCSV.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Banks\BankConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Banks\BankTransaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Banks\PTCUTransaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVAttributes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Matching\IndexSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matching\ResultSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matching\Result.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Matching\Matcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSV\CSVRow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUConfiguration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PTCU\PTCUTransaction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\DateRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\TimeRule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\IRule.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\AmountRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\QuantityRule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\ValueRule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Rule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\RuleSet.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\NameRule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\PayeeRule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\ITransaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Transactions\TransactionSet.cs" />

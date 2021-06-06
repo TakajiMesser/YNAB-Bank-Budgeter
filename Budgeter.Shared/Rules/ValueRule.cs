@@ -1,4 +1,4 @@
-﻿using Budgeter.Shared.PTCU;
+﻿using Budgeter.Shared.Banks;
 using Budgeter.Shared.YNAB;
 using System;
 
@@ -7,15 +7,15 @@ namespace Budgeter.Shared.Rules
     public class ValueRule : Rule //where T : IComparable, IEquatable<T>
     {
         public string YNABColumnName { get; set; }
-        public string PTCUColumnName { get; set; }
+        public string BankColumnName { get; set; }
 
-        public override int Compare(YNABTransaction ynabTransaction, PTCUTransaction ptcuTransaction)
+        public override int Compare(YNABTransaction ynabTransaction, BankTransaction bankTransaction)
         {
             var ynabValue = ynabTransaction.GetValue(YNABColumnName);
-            var ptcuValue = ptcuTransaction.GetValue(PTCUColumnName);
+            var ptcuValue = bankTransaction.GetValue(BankColumnName);
 
-            if (ynabValue == null) throw new Exception("YNAB value for " + YNABColumnName + " is not a comparable type");
-            if (ptcuValue == null) throw new Exception("PTCU value for " + PTCUColumnName + " is not a comparable type");
+            if (ynabValue == null) throw new InvalidOperationException("YNAB value for " + YNABColumnName + " is not a comparable type");
+            if (ptcuValue == null) throw new InvalidOperationException("Bank value for " + BankColumnName + " is not a comparable type");
 
             return ynabValue.CompareTo(ptcuValue);
         }

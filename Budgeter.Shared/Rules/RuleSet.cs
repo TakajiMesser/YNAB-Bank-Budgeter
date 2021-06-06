@@ -31,12 +31,12 @@ namespace Budgeter.Shared.Rules
         {
             switch (value)
             {
-                case "Name":
-                    return new NameRule();
-                case "Amount":
-                    return new AmountRule();
-                case "date":
-                    return new DateRule();
+                case "Payee":
+                    return new PayeeRule();
+                case "Quantity":
+                    return new QuantityRule();
+                case "Time":
+                    return new TimeRule();
             }
 
             throw new ArgumentException("Could not handle rule value " + value);

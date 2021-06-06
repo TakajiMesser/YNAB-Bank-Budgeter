@@ -40,7 +40,11 @@
                     </Style>
                 </ListView.Resources>-->
                 <ListView.View>
-                    <GridView x:Name="BankGrid"/>
+                    <GridView x:Name="BankGrid">
+                        <GridViewColumn Header="Payee" Width="120" DisplayMemberBinding="{Binding BankTransaction.Payee}" />
+                        <GridViewColumn Header="Quantity" Width="120" DisplayMemberBinding="{Binding BankTransaction.Quantity}" />
+                        <GridViewColumn Header="Time" Width="120" DisplayMemberBinding="{Binding BankTransaction.Time}" />
+                    </GridView>
                 </ListView.View>
             </ListView>
             <Button Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching" Grid.Row="1" Grid.Column="0"/>

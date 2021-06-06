@@ -1,5 +1,5 @@
-﻿using Budgeter.Shared.CSV;
-using Budgeter.Shared.PTCU;
+﻿using Budgeter.Shared.Banks;
+using Budgeter.Shared.CSV;
 using Budgeter.Shared.Transactions;
 using Budgeter.Shared.YNAB;
 using System.Collections.Generic;
@@ -19,14 +19,14 @@ namespace Budgeter.Shared.Matching
 
         public void Clear() => _results.Clear();
 
-        public void MarkResult(int ynabIndex, int ptcuIndex) { }
+        //public void MarkResult(int ynabIndex, int ptcuIndex) { }
 
         public void SaveAsCSV(string filePath)
         {
             var csvFile = new CSVFile(filePath);
 
             var ynabProperties = typeof(YNABTransaction).GetProperties();
-            var ptcuProperties = typeof(PTCUTransaction).GetProperties();
+            var ptcuProperties = typeof(BankTransaction).GetProperties();
 
             foreach (var property in ynabProperties)
             {
@@ -50,7 +50,7 @@ namespace Budgeter.Shared.Matching
 
                 foreach (var property in ptcuProperties)
                 {
-                    var value = GetValue(result.PTCUTransaction, property);
+                    var value = GetValue(result.BankTransaction, property);
                     csvRow.Values.Add(value);
                 }
 

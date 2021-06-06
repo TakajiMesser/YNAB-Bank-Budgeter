@@ -1,19 +1,19 @@
-﻿using Budgeter.Shared.PTCU;
+﻿using Budgeter.Shared.Banks;
 using Budgeter.Shared.YNAB;
 
 namespace Budgeter.Shared.Matching
 {
     public class Result
     {
-        public Result(YNABTransaction ynabTransaction, PTCUTransaction ptcuTransaction)
+        public Result(YNABTransaction ynabTransaction, BankTransaction bankTransaction)
         {
             YNABTransaction = ynabTransaction;
-            PTCUTransaction = ptcuTransaction;
+            BankTransaction = bankTransaction;
         }
 
         public YNABTransaction YNABTransaction { get; set; }
-        public PTCUTransaction PTCUTransaction { get; set; }
+        public BankTransaction BankTransaction { get; set; }
 
-        public bool IsMatch => YNABTransaction != null && PTCUTransaction != null;
+        public bool IsMatch => YNABTransaction != null && BankTransaction != null;
     }
 }

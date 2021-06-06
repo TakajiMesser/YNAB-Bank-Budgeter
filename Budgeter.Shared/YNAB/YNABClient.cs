@@ -17,7 +17,7 @@ namespace Budgeter.Shared.YNAB
         public const string BASE_URL = "https://api.youneedabudget.com/v1";
 
         private YNABConfiguration _configuration;
-        private HttpClient _client = new HttpClient();
+        private HttpClient _client = new();
 
         public YNABClient(YNABConfiguration configuration)
         {
@@ -33,7 +33,7 @@ namespace Budgeter.Shared.YNAB
 
             foreach (var transaction in transactions)
             {
-                Transactions.Add(new YNABTransaction()
+                _transactions.Add(new YNABTransaction()
                 {
                     Amount = transaction.Amount / 1000.0f,
                     Approved = transaction.Approved,

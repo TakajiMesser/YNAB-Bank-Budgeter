@@ -2,20 +2,12 @@
 
 namespace Budgeter.Shared.Transactions
 {
-    public enum ValueTypes
-    {
-        Name,
-        Amount,
-        Date
-    }
-
     public interface ITransaction
     {
-        string GetName();
-        float GetAmount();
-        DateTime GetDate();
+        string Payee { get; }
+        float Quantity { get; }
+        DateTime Time { get; }
 
-        IComparable GetValue(ValueTypes valueType);
         IComparable GetValue(string propertyName);
     }
 }
