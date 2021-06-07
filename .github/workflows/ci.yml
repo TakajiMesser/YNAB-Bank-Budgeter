@@ -30,9 +30,10 @@ jobs:
       #SigningCertificate: YNAB-Bank-Budgeter.pfx
       Configuration: Debug
       Framework: net5.0-windows
+      Runtime: win-${{ matrix.targetplatform }}
       Platform: ${{ matrix.targetplatform }}
       Solution_Path: Budgeter.sln
-      Wpf_Project_Path: Budgeter.WPFApplication/Budgeter.WPFApplication.csproj
+      Project_Path: Budgeter.WPFApplication/Budgeter.WPFApplication.csproj
       #Wap_Project_Directory: Budgeter.Package
       #Wap_Project__Name: Budgeter.Package.waproj
       Actions_Allow_Unsecure_Commands: true # Allows AddPAth and SetEnv commands
@@ -114,7 +115,7 @@ jobs:
       #    TargetPlatform: ${{ matrix.targetplatform }}
           
       - name: dotnet build
-        run: dotnet build $env:Solution_Path --configuration $env:Configuration -p:DeployOnBuild=true -p:PublishProfile=FolderProfile
+        run: dotnet publish $env:Solution_Path --configuration $env:Configuration --runtime $env:Runtime -p:DeployOnBuild=true -p:PublishProfile=FolderProfile
       
       #- name: dotnet publish
       #  run: dotnet publish --configuration $env:Configuration -p:PublishProfile=FolderProfile
