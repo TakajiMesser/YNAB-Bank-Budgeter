@@ -28,6 +28,9 @@ jobs:
     env:
       #App_Packages_Directory: AppPackages
       #SigningCertificate: YNAB-Bank-Budgeter.pfx
+      Configuration: Debug
+      Framework: net5.0-windows
+      Platform: ${{ matrix.targetplatform }}
       Solution_Path: Budgeter.sln
       Wpf_Project_Path: Budgeter.WPFApplication/Budgeter.WPFApplication.csproj
       #Wap_Project_Directory: Budgeter.Package
@@ -55,8 +58,14 @@ jobs:
       #    dotnet-version: '3.1.302'
 
       # Add  MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
-      - name: Setup MSBuild.exe
-        uses: microsoft/setup-msbuild@v1.0.1
+      #- name: Setup MSBuild.exe
+      #  uses: microsoft/setup-msbuild@v1.0.2
+        
+      # Setup dotnet
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
 
       # Update the version before build
       #- name: Update manifest version
@@ -66,14 +75,19 @@ jobs:
       #    $manifest.save(".\$env:Wap_Project_Directory\Package.appxmanifest")
 
       # Restore the application
-      - name:  Restore the Wpf application to populate the obj folder
-        run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration
-        env:
-          Configuration: Debug
-          RuntimeIdentifier: win-${{ matrix.targetplatform }}
+      #- name: Restore the Wpf application to populate the obj folder
+      #  run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration
+      #  env:
+      #    Configuration: Debug
+      #    RuntimeIdentifier: win-${{ matrix.targetplatform }}
+          
+      #- name: Restore application
+      #  run: dotnet restore $env:Solution_Path --configuration $env:Configuration
+      #  env:
+      #    RuntimeIdentifier: win-${{ matrix.targetplatform }}
 
-      - name: Restore NuGet Packages
-        run: nuget restore $env:Solution_Path
+      #- name: Restore NuGet Packages
+      #  run: nuget restore $env:Solution_Path
 
       # Decode the Base64 encoded Pfx
       #- name: Decode the Pfx
@@ -93,11 +107,17 @@ jobs:
       #    TargetPlatform: ${{ matrix.targetplatform }}
 
       # Simplified build
-      - name: Build and Publish
-        run: msbuild $env:Solution_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
-        env:
-          Configuration: Debug
-          TargetPlatform: ${{ matrix.targetplatform }}
+      #- name: Build and Publish
+      #  run: msbuild $env:Solution_Path /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+      #  env:
+      #    Configuration: Debug
+      #    TargetPlatform: ${{ matrix.targetplatform }}
+          
+      - name: dotnet build
+        run: dotnet build $env:Solution_Path --configuration $env:Configuration -p:DeployOnBuild=true -p:PublishProfile=FolderProfile
+      
+      #- name: dotnet publish
+      #  run: dotnet publish --configuration $env:Configuration -p:PublishProfile=FolderProfile
 
       # Remove the .pfx
       #- name: Remove the .pfx
@@ -108,7 +128,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Published Package
-          path: Budgeter.WPFApplication\bin\Debug\net5.0-windows
+          path: Budgeter.WPFApplication\bin\${{ env.Platform }}\${{ env.Configuration }}\${{ env.Framework }}
           #path: Budgeter.WPFApplication\bin\${{ matrix.targetplatform }}\Debug
           #name: MSIX Package
           #path: ${{ env.Wap_Project_Directory }}\${{ env.App_Packages_Directory }}
