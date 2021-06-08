@@ -40,12 +40,16 @@ namespace Budgeter.Shared.CSV
                         }
                         else
                         {
-                            foreach (var value in line.Split(','))
+                            // Skip any leading lines prior to headers
+                            if (line.Contains(","))
                             {
-                                Headers.Add(value);
-                            }
+                                foreach (var value in line.Split(','))
+                                {
+                                    Headers.Add(value);
+                                }
 
-                            hasHeaders = true;
+                                hasHeaders = true;
+                            }
                         }
                     }
                 }

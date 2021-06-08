@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Budgeter.WPFApplication.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -49,5 +50,17 @@ namespace Budgeter.WPFApplication.Views
         private void OnLoaded(object sender, EventArgs e) { }
 
         private void OnClosing(object sender, CancelEventArgs e) => Application.Current.Shutdown();
+
+        private void List_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (sender == YNABList)
+            {
+                ViewHelper.GetChild<ScrollViewer>(BankList).ScrollToVerticalOffset(e.VerticalOffset);
+            }
+            else if (sender == BankList)
+            {
+                ViewHelper.GetChild<ScrollViewer>(YNABList).ScrollToVerticalOffset(e.VerticalOffset);
+            }
+        }
     }
 }

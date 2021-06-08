@@ -30,7 +30,7 @@ namespace Budgeter.WPFApplication.ViewModels
                     Logger.LineBreak();
 
                     var ynabClient = new YNABClient(Configuration.YNABConfiguration);
-                    var bankClient = new BankClient(Configuration.BankConfiguration);
+                    var bankClient = new BankClient(Configuration.BankConfigurations);
 
                     var ynabFetchTask = ynabClient.FetchTransactions();
                     var bankFetchTask = bankClient.FetchTransactions();

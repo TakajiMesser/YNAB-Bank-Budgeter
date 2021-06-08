@@ -24,25 +24,29 @@ namespace Budgeter.Shared.YNAB
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", configuration.PersonalAccessToken);
         }
 
-        public async override Task FetchTransactions()
+        public override async Task FetchTransactions()
         {
             var budget = await GetBudgetAsync();
-            var account = await GetAccountAsync(budget);
-            var transactions = await GetTransactionsAsync(budget, account);
+            var accounts = await GetAccountAsync(budget);
 
-            foreach (var transaction in transactions)
+            foreach (var account in accounts)
             {
-                _transactions.Add(new YNABTransaction()
+                var transactions = await GetTransactionsAsync(budget, account);
+
+                foreach (var transaction in transactions)
                 {
-                    Amount = transaction.Amount / 1000.0f,
-                    Approved = transaction.Approved,
-                    CategoryName = transaction.CategoryName,
-                    Cleared = transaction.Cleared,
-                    Date = DateTime.Parse(transaction.Date),
-                    FlagColor = transaction.FlagColor,
-                    Memo = transaction.Memo,
-                    PayeeName = transaction.PayeeName
-                });
+                    _transactions.Add(new YNABTransaction()
+                    {
+                        Amount = transaction.Amount / 1000.0f,
+                        Approved = transaction.Approved,
+                        CategoryName = transaction.CategoryName,
+                        Cleared = transaction.Cleared,
+                        Date = DateTime.Parse(transaction.Date),
+                        FlagColor = transaction.FlagColor,
+                        Memo = transaction.Memo,
+                        PayeeName = transaction.PayeeName
+                    });
+                }
             }
         }
 
@@ -54,12 +58,12 @@ namespace Budgeter.Shared.YNAB
             return budgets.FirstOrDefault(b => b.Name == _configuration.BudgetName);
         }
 
-        public async Task<Account> GetAccountAsync(Budget budget)
+        public async Task<IEnumerable<Account>> GetAccountAsync(Budget budget)
         {
             var response = await _client.GetAsync(BASE_URL + "/budgets/" + budget.ID + "/accounts");
             var accounts = await ParseResponseForModels<Account>(response);
 
-            return accounts.FirstOrDefault(a => a.Name == _configuration.AccountName);
+            return accounts.Where(a => _configuration.AccountNames.Contains(a.Name));
         }
 
         public async Task<IEnumerable<Transaction>> GetTransactionsAsync(Budget budget, Account account)

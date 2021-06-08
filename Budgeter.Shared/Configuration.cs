@@ -4,6 +4,7 @@ using Budgeter.Shared.YNAB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Budgeter.Shared
@@ -28,7 +29,7 @@ namespace Budgeter.Shared
         };
 
         public YNABConfiguration YNABConfiguration { get; set; }
-        public BankConfiguration BankConfiguration { get; set; }
+        public List<BankConfiguration> BankConfigurations { get; set; } = new List<BankConfiguration>();
         public RuleSet RuleSet { get; set; }
         public string OutputFilePath { get; set; }
 
@@ -39,7 +40,7 @@ namespace Budgeter.Shared
         public void Load(string filePath)
         {
             YNABConfiguration = null;
-            BankConfiguration = null;
+            BankConfigurations.Clear();
             RuleSet = null;
             OutputFilePath = null;
 

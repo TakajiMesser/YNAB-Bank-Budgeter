@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Budgeter.Shared.YNAB
 {
@@ -6,7 +7,7 @@ namespace Budgeter.Shared.YNAB
     {
         public string PersonalAccessToken { get; set; }
         public string BudgetName { get; set; }
-        public string AccountName { get; set; }
+        public List<string> AccountNames { get; set; }
         public DateTime? SinceDate { get; set; }
     }
 }

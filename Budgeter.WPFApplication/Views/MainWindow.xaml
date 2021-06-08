@@ -25,7 +25,7 @@
             </Grid.ColumnDefinitions>
             <Label Content="YNAB" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
             <Label Content="Bank" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
-            <ListView Name="YNABList" ItemsSource="{Binding Results}" Grid.Row="1" Grid.Column="0">
+            <ListView Name="YNABList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" Grid.Row="1" Grid.Column="0">
                 <!--<ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -40,7 +40,7 @@
                 </ListView.View>
             </ListView>
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
-            <ListView Name="BankList" ItemsSource="{Binding Results}"  Grid.Row="1" Grid.Column="2">
+            <ListView Name="BankList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" Grid.Row="1" Grid.Column="2">
                 <!--<ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />

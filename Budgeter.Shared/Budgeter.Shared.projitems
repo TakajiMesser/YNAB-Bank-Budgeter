@@ -10,9 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Banks\BankClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Banks\BankCSV.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Banks\Calculation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Banks\BankConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Banks\BankTransaction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Banks\UniversityTransaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Banks\PTCUTransaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Client.cs" />

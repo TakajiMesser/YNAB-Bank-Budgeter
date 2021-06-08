@@ -291,5 +291,4 @@ Screenshots/
 
 # Settings
 config.json
-ptcuHistory.csv
-result.csv
+*.csv
