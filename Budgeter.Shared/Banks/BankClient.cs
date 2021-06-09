@@ -22,6 +22,7 @@ namespace Budgeter.Shared.Banks
             for (var i = 0; i < csvFile.Rows.Count; i++)
             {
                 var transaction = CreateTransaction(configuration.BankName);
+                transaction.AccountName = configuration.AccountName;
 
                 csvFile.DeserializeInto(transaction, i);
                 _transactions.Add(transaction);

@@ -7,5 +7,8 @@ namespace Budgeter.Shared.Banks
     {
         [CSVIgnore]
         public abstract string BankName { get; }
+
+        [CSVIgnore]
+        public string AccountName { get; set; }
     }
 }

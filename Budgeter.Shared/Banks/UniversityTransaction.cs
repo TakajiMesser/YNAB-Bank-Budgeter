@@ -17,7 +17,7 @@ namespace Budgeter.Shared.Banks
         [CSVIgnore]
         public override string BankName => "University Credit Union";
         public override string Payee => Memo ?? "";
-        public override float Quantity => Credit - Debit;
+        public override float Quantity => Credit + Debit;
         public override DateTime Time => Date;
     }
 }

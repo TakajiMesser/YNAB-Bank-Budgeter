@@ -24,8 +24,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="YNAB" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
-            <Label Content="Bank" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
-            <ListView Name="YNABList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" Grid.Row="1" Grid.Column="0">
+            <Label Content="Banks" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
+            <ListView Name="YNABList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" SelectionChanged="List_SelectionChanged" Grid.Row="1" Grid.Column="0">
                 <!--<ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -33,6 +33,7 @@
                 </ListView.Resources>-->
                 <ListView.View>
                     <GridView x:Name="YNABGrid">
+                        <GridViewColumn Header="Account" Width="120" DisplayMemberBinding="{Binding YNABTransaction.AccountName}" />
                         <GridViewColumn Header="Payee" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Payee}" />
                         <GridViewColumn Header="Quantity" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Quantity}" />
                         <GridViewColumn Header="Time" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Time}" />
@@ -40,7 +41,7 @@
                 </ListView.View>
             </ListView>
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
-            <ListView Name="BankList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" Grid.Row="1" Grid.Column="2">
+            <ListView Name="BankList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" SelectionChanged="List_SelectionChanged" Grid.Row="1" Grid.Column="2">
                 <!--<ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -48,6 +49,7 @@
                 </ListView.Resources>-->
                 <ListView.View>
                     <GridView x:Name="BankGrid">
+                        <GridViewColumn Header="Bank" Width="120" DisplayMemberBinding="{Binding BankTransaction.BankName}" />
                         <GridViewColumn Header="Payee" Width="120" DisplayMemberBinding="{Binding BankTransaction.Payee}" />
                         <GridViewColumn Header="Quantity" Width="120" DisplayMemberBinding="{Binding BankTransaction.Quantity}" />
                         <GridViewColumn Header="Time" Width="120" DisplayMemberBinding="{Binding BankTransaction.Time}" />

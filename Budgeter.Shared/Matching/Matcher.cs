@@ -46,16 +46,89 @@ namespace Budgeter.Shared.Matching
             }*/
         }
 
+        // Increment through bank transactions until we either 
+        private Result FindMatch(IRule rule, YNABTransaction ynabTransaction, Type transactionType)
+        {
+            while (_indexSet.Index(transactionType) < TransactionSet.Count(transactionType))
+            {
+                var bankTransaction = (BankTransaction)TransactionSet.TransactionAt(transactionType, _indexSet.Index(transactionType));
+                var result = GetResult(rule, ynabTransaction, bankTransaction);
+
+                // This means that YNAB > Bank, so we need to keep incrementing...
+                if (result.BankTransaction != null)
+                {
+                    _indexSet.Increment(transactionType);
+
+                    if (result.YNABTransaction != null)
+                    {
+                        // Match found!
+                        return result;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+
+                ResultSet.AddResult(result);
+            }
+
+            return null;
+        }
+
         private void ApplyRule(IRule rule)
         {
+            /*foreach (var transactionType in TransactionSet.Types.Where(t => t != typeof(YNABTransaction)))
+            {
+                var ynabIndex = 0;
+                var bankIndex = 0;
+
+                while (ynabIndex < TransactionSet.Count(typeof(YNABTransaction)) && bankIndex < TransactionSet.Count(transactionType))
+                {
+                    var ynabTransaction TransactionSet.TransactionAt<YNABTransaction>(ynabIndex);
+                    var bankTransaction
+                }
+            }*/
+
             while (_indexSet.Index<YNABTransaction>() < TransactionSet.Count<YNABTransaction>())
             {
                 var ynabTransaction = TransactionSet.TransactionAt<YNABTransaction>(_indexSet.Index<YNABTransaction>());
-                var isYNABMatchFound = false;
-                var hasBankTransaction = false;
+                var isMatchFound = false;
+                
+                // TODO - Loop through the other transaction types, incrementing them forward until:
+                //          - The YNAB row has been matched
+                //          - The Bank row > the YNAB row
+                //      - If we reach the point where ALL Bank rows > YNAB row and the YNAB row still hasn't been matched,
+                //          - Then create a result with just the YNAB row
+                foreach (var transactionType in TransactionSet.Types.Where(t => t != typeof(YNABTransaction)))
+                {
+                    var result = FindMatch(rule, ynabTransaction, transactionType);
+
+                    if (result != null)
+                    {
+                        if (isMatchFound)
+                        {
+                            // The YNAB transaction has already been matched in another row, so remove it from this result
+                            result.YNABTransaction = null;
+                        }
+
+                        ResultSet.AddResult(result);
+                        isMatchFound = true;
+                    }
+                }
+
+                if (!isMatchFound)
+                {
+                    // Because we haven't matched the YNAB row, add it as a result row and increment
+                    ResultSet.AddResult(new Result(ynabTransaction, null));
+                }
+
+                _indexSet.Increment<YNABTransaction>();
 
                 // TODO - What if NO bank transactions match this YNAB transaction?
                 // In that case, we need to add a result row with just the YNAB transaction listed, and then increment the YNAB row forward
+                /*var hasBankTransaction = false;
+                
                 foreach (var transactionType in TransactionSet.Types.Where(t => t != typeof(YNABTransaction)))
                 {
                     if (_indexSet.Index(transactionType) < TransactionSet.Count(transactionType))
@@ -99,7 +172,7 @@ namespace Budgeter.Shared.Matching
                 if (isYNABMatchFound)
                 {
                     _indexSet.Increment<YNABTransaction>();
-                }
+                }*/
             }
         }
 

@@ -37,6 +37,7 @@ namespace Budgeter.Shared.YNAB
                 {
                     _transactions.Add(new YNABTransaction()
                     {
+                        AccountName = account.Name,
                         Amount = transaction.Amount / 1000.0f,
                         Approved = transaction.Approved,
                         CategoryName = transaction.CategoryName,

@@ -6,6 +6,8 @@ namespace Budgeter.Shared.YNAB
 {
     public class YNABTransaction : Transaction
     {
+        public string AccountName { get; set; }
+
         public DateTime Date { get; set; }
         public float Amount { get; set; }
         public string Memo { get; set; }

@@ -62,5 +62,45 @@ namespace Budgeter.WPFApplication.Views
                 ViewHelper.GetChild<ScrollViewer>(YNABList).ScrollToVerticalOffset(e.VerticalOffset);
             }
         }
+
+        private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender == YNABList)
+            {
+                foreach (var item in e.AddedItems)
+                {
+                    var index = YNABList.Items.IndexOf(item);
+                    var match = BankList.Items.GetItemAt(index);
+
+                    BankList.SelectedItems.Add(match);
+                }
+
+                foreach (var item in e.RemovedItems)
+                {
+                    var index = YNABList.Items.IndexOf(item);
+                    var match = BankList.Items.GetItemAt(index);
+
+                    BankList.SelectedItems.Remove(match);
+                }
+            }
+            else if (sender == BankList)
+            {
+                foreach (var item in e.AddedItems)
+                {
+                    var index = BankList.Items.IndexOf(item);
+                    var match = YNABList.Items.GetItemAt(index);
+
+                    YNABList.SelectedItems.Add(match);
+                }
+
+                foreach (var item in e.RemovedItems)
+                {
+                    var index = BankList.Items.IndexOf(item);
+                    var match = YNABList.Items.GetItemAt(index);
+
+                    YNABList.SelectedItems.Remove(match);
+                }
+            }
+        }
     }
 }
