@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Budgeter.WPFApplication.ViewModels"
+        xmlns:custom="clr-namespace:Budgeter.WPFApplication.Views.Custom"
         xmlns:controls="clr-namespace:Budgeter.WPFApplication.Views" Loaded="OnLoaded" Closing="OnClosing"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="450" Width="800">
@@ -23,39 +24,11 @@
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
             <Label Content="YNAB" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
             <Label Content="Banks" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2"/>
-            <ListView Name="YNABList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" SelectionChanged="List_SelectionChanged" Grid.Row="1" Grid.Column="0">
-                <!--<ListView.Resources>
-                    <Style TargetType="{x:Type GridViewColumnHeader}">
-                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    </Style>
-                </ListView.Resources>-->
-                <ListView.View>
-                    <GridView x:Name="YNABGrid">
-                        <GridViewColumn Header="Account" Width="120" DisplayMemberBinding="{Binding YNABTransaction.AccountName}" />
-                        <GridViewColumn Header="Payee" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Payee}" />
-                        <GridViewColumn Header="Quantity" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Quantity}" />
-                        <GridViewColumn Header="Time" Width="120" DisplayMemberBinding="{Binding YNABTransaction.Time}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
-            <ListView Name="BankList" ItemsSource="{Binding Results}" AlternationCount="2" ScrollViewer.ScrollChanged="List_ScrollChanged" SelectionChanged="List_SelectionChanged" Grid.Row="1" Grid.Column="2">
-                <!--<ListView.Resources>
-                    <Style TargetType="{x:Type GridViewColumnHeader}">
-                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    </Style>
-                </ListView.Resources>-->
-                <ListView.View>
-                    <GridView x:Name="BankGrid">
-                        <GridViewColumn Header="Bank" Width="120" DisplayMemberBinding="{Binding BankTransaction.BankName}" />
-                        <GridViewColumn Header="Payee" Width="120" DisplayMemberBinding="{Binding BankTransaction.Payee}" />
-                        <GridViewColumn Header="Quantity" Width="120" DisplayMemberBinding="{Binding BankTransaction.Quantity}" />
-                        <GridViewColumn Header="Time" Width="120" DisplayMemberBinding="{Binding BankTransaction.Time}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <custom:TransactionGrid x:Name="YNABGrid" LeadingColumn="AccountName"  Grid.Row="1" Grid.Column="0"/>
+            <custom:TransactionGrid x:Name="BankGrid" LeadingColumn="BankName" Grid.Row="1" Grid.Column="2"/>
             <Button Name="MatchButton" Command="{Binding PerformMatchingCommand}" Content="Perform Matching" Grid.Row="2" Grid.Column="0"/>
             <Button Name="ClearConsoleButton" Command="{Binding ClearConsoleCommand}" Content="Clear Console" Grid.Row="2" Grid.Column="2"/>
         </Grid>
